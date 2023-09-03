@@ -2,3 +2,28 @@ import nltk
 
 from nltk import wordpunct_tokenize 
 from nltk.corpus import stopwords 
+
+def words_tokenize(text): 
+    language_ratios = {}
+    token = wordpunct_tokenize(text)
+    words = [word.lower() for word in token]
+    
+    for language in stopwords.fileids():
+        words_set = set(words)
+        stopwords_set = set(stopwords.words(language)) 
+        common_words = words_set.intersection(stopwords_set)
+        
+        if language.lower() in (['english', 'french', 'german', 'spanish']): 
+            language_ratios[language] = len(common_words) 
+            
+    return language_ratios
+
+
+def language_detect(text): 
+    lang_dict = words_tokenize(text)
+    lang = max(lang_dict, key= lang_dict.get)
+    return lang 
+
+text = input()
+lang = language_detect(text)
+print (lang.capitalize())
